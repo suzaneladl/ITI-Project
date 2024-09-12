@@ -26,6 +26,7 @@ class Signup extends Component {
         }
         
      }
+    
      register= (e) => {
          let RegisterData = {
              userName : this.state.userName,

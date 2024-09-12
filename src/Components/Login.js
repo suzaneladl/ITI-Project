@@ -9,23 +9,28 @@ class Login extends Component {
         error:""
      }
      
-     async componentWillMount(){
+    async componentWillMount(){
+    await AssureLogin(this.props);
+    if(this.props.location.state){
+        this.setState({
+            error: this.props.location.state.error
+        })
+    }
+    
+    }
+    async componentDidMount() {
         await AssureLogin(this.props);
-
-        if(this.props.location.state){
-            this.setState({
-                error: this.props.location.state.error
-            })
+        let loginData = JSON.parse(window.localStorage.getItem("loginData"));
+        let RegisterData = JSON.parse(window.localStorage.getItem("RegisterData"));
+        if(loginData || RegisterData) this.props.history.push("/");
+     }
+    saveLogin= () => {
+        let loginData = {
+            userName : this.state.userName,
+            password: this.state.password
         }
-        
-     }
-     saveLogin= () => {
-         let loginData = {
-             userName : this.state.userName,
-             password: this.state.password
-         }
-         window.localStorage.setItem("loginData", JSON.stringify(loginData));
-     }
+        window.localStorage.setItem("loginData", JSON.stringify(loginData));
+    }
     render() { 
         return (
             
@@ -43,7 +48,7 @@ class Login extends Component {
                                 })
                             }} required /> 
                             <span></span>
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="username">Enter username or email</label>
                         </div>
                         <div className="txt_field"> 
                             <input name="password" type="password" value={this.state.password} onChange={e => {
